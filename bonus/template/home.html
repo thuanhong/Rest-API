@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Simulate Youtube API</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+    </head>
+    <body>
+        <h2>Youtube Data API (v3) Simulate</h2>
+        <h4>URL API : https://www.googleapis.com/youtube/v3</h4>
+
+        {% if error %}
+            <h1>{{error}}/h1>
+        {% endif %}
+
+        <form id="main-form" action="{% url 'execute' default %}" method="POST">
+            {% csrf_token %}
+            <div>
+                <span>Choice resource : </span>
+                <select id="choice_resource" onchange="window.location.href=this.value">
+                    {% for each in res.all %}
+                        {% if default == each.id %}
+                            <option value="{% url 'run' each.id %}" title="{{each.description}}" selected>{{each.resource}}</option>
+                        {% else %}
+                            <option value="{% url 'run' each.id %}" title="{{each.description}}">{{each.resource}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <hr>
+            <br>
+            <div>
+                <span>Choice method : </span>
+                {% for x in method.method_set.all %}
+                    <div class="choice">
+                        <input type="radio" name="choice" value="{{x.method}}">
+                        <label for="x{{forloop.counter}}" title="{{x.descrip}}">{{x.method}}</label>
+                    </div>
+                {% endfor %}
+            </div>
+            <hr>
+            <br>
+            <div>
+                <span>Input param</span>
+                <div style="display:flex">
+                    <div class="param" id="key_param">
+                        <p>Key</p>
+                        <div>
+                            <input name="param_key" type="text">
+                        </div>
+                    </div>
+
+                    <div class="param" id="value_param">
+                        <p>Value</p>
+                        <div>
+                            <input name="param_value" type="text">
+                        </div>
+                    </div>
+
+                    <div class="param">
+                        <p class="add-input" onclick="add_param()">Add</p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <br>
+            <div>
+                <span>Input header</span>
+                <div style="display:flex">
+                    <div class="param" id="key_header">
+                        <p>Key</p>
+                        <div>
+                            <input name="header_key" type="text">
+                        </div>
+                    </div>
+
+                    <div class="param" id="value_header">
+                        <p>Value</p>
+                        <div>
+                            <input name="header_value" type="text">
+                        </div>
+                    </div>
+                    
+                    <div class="param">
+                        <p class="add-input" onclick="add_header()">Add</p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <br>
+            <div>
+                <p>Input Body (must is json type or empty)</p>
+                <textarea name="body" id="text" cols="100vh" rows="20vh"></textarea>
+            </div>
+            <hr>
+            <br>
+            <button>SEND</button>
+        </form>
+
+        <script>
+            function add_param() {
+                var newNode1 = document.createElement('div')
+                newNode1.innerHTML = '<input name="param_key" type="text">'
+                document.getElementById('key_param').appendChild(newNode1)
+                var newNode2 = document.createElement('div')
+                newNode2.innerHTML = '<input name="param_value" type="text">'
+                document.getElementById('value_param').appendChild(newNode2)
+            }
+
+            function add_header() {
+                var newNode1 = document.createElement('div')
+                newNode1.innerHTML = '<input name="header_key" type="text">'
+                document.getElementById('key_header').appendChild(newNode1)
+                var newNode2 = document.createElement('div')
+                newNode2.innerHTML = '<input name="header_value" type="text">'
+                document.getElementById('value_header').appendChild(newNode2)
+            }
+        </script>
+
+    </body>
+</html>

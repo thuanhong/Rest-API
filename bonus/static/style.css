@@ -1,0 +1,16 @@
+div.param > * {
+    display: block;
+    margin: 2vh
+}
+
+div.param {
+    margin: 3vh;
+}
+
+.add-input {
+    background-color: aqua;
+    border: 1px solid black;
+    cursor: pointer;
+    padding: 1vh;
+    margin: 1vh;
+}
