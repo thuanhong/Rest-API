@@ -36,4 +36,4 @@ def get_reponse(resource, body, method, header, param):
         'update' : requests.put,
         'delete' : requests.delete,
     }
-    return actions[method](url, headers=header, json=body, params=param).text
+    return actions[method](url, headers=header, json=body, params=param).json()

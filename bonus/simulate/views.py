@@ -49,8 +49,12 @@ def execute(request, default):
 def searchVideo(request):
     params = {
         "part" : "snippet",
-        "maxResults" : "10",
+        "maxResults" : "15",
         "q" : request.POST['keyword'],
+        "key" : "AIzaSyAelaHZU8ryB7rcyQPaJbRytcX2RrmFKIY",
+        "order" : "viewCount",
+        "type" : "video"
     }
     output = get_reponse("search", None, 'list', None, params)
-    return render(request, 'seacrh.html', {'output':output})
+    url = "https://www.youtube.com/embed/" + output["items"][0]["id"]["videoId"]
+    return render(request, 'search.html', {'output':output["items"], "url" : url})
