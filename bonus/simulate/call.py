@@ -30,7 +30,6 @@ def get_header(key_header, value_header):
 
 def get_reponse(resource, body, method, header, param):
     url = 'https://www.googleapis.com/youtube/v3/' + resource + '?'
-    print(url)
     actions = {
         'list' : requests.get,
         'insert' : requests.post,

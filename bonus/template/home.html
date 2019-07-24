@@ -13,6 +13,26 @@
         <h2>Youtube Data API (v3) Simulate</h2>
         <h4>URL API : https://www.googleapis.com/youtube/v3</h4>
 
+        <div class="build-ins">
+            <form action="{% url 'searchVideo' %}" method="POST">
+                {% csrf_token %}
+                <input name="keyword" type="text" placeholder="Input keyword">
+                <button class="build-in">Search</button>
+            </form>
+
+            <form action="{% url 'searchVideo' %}" method="POST">
+                {% csrf_token %}
+                <input type="text" placeholder="Input keyword">
+                <button class="build-in">Search</button>
+            </form>
+
+            <form action="{% url 'searchVideo' %}" method="POST">
+                {% csrf_token %}
+                <input type="text" placeholder="Input keyword">
+                <button class="build-in">Search</button>
+            </form>
+        </div>
+
         {% if error %}
             <h1>{{error}}/h1>
         {% endif %}

@@ -13,7 +13,6 @@ def get_params():
             param = input('> ')
         else:
             param = input('Wrong (ex : q=avengers) > ')
-    params['key'] = 'AIzaSyA2D42QaLroI-4Rs2fPD5xaEHk6YyS-6gs'
     return params
 
 

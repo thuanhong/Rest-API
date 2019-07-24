@@ -14,3 +14,44 @@ div.param {
     padding: 1vh;
     margin: 1vh;
 }
+
+a {
+    text-decoration: none
+}
+
+div.build-ins {
+    border: 3px solid #289FED;
+    border-radius: 5px;
+    width: 50%;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+}
+
+div.build-ins > form {
+    padding: 3vh;
+    text-align: center;
+    border-top: 3px solid #289FED;
+}
+
+div.build-ins > form:first-child {
+    border-top: none;
+}
+
+div.build-ins > form > input {
+    width: 60%
+}
+
+.build-in {
+    padding: 1vh;
+    font-weight: bold;
+    background-color: aqua;
+    border-radius: 1vh;
+    width: 15vh;
+    text-align: center;
+    cursor: pointer;
+}
+
+.build-in:hover {
+    background-color: aquamarine;
+    color: brown;
+}

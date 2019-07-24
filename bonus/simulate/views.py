@@ -46,3 +46,11 @@ def execute(request, default):
     output = get_reponse(resource, body, method, headers, params)
     return render(request, 'results.html', {'output':output})
 
+def searchVideo(request):
+    params = {
+        "part" : "snippet",
+        "maxResults" : "10",
+        "q" : request.POST['keyword'],
+    }
+    output = get_reponse("search", None, 'list', None, params)
+    return render(request, 'seacrh.html', {'output':output})

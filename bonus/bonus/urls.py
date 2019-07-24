@@ -21,5 +21,6 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('<int:each_id>/', views.run, name='run'),
     path('<int:default>/execute/', views.execute, name='execute'),
+    path('searchVideo/', views.searchVideo, name="searchVideo"),
     path('admin/', admin.site.urls),
 ]
