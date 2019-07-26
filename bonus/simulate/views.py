@@ -46,6 +46,7 @@ def execute(request, default):
     output = get_reponse(resource, body, method, headers, params)
     return render(request, 'results.html', {'output':output})
 
+
 def searchVideo(request):
     params = {
         "part" : "snippet",
@@ -53,8 +54,16 @@ def searchVideo(request):
         "q" : request.POST['keyword'],
         "key" : "AIzaSyAelaHZU8ryB7rcyQPaJbRytcX2RrmFKIY",
         "order" : "viewCount",
-        "type" : "video"
+        "type" : "video",
+        "pageToken" : request.POST.get("token") if request.POST.get("token") else ''
     }
     output = get_reponse("search", None, 'list', None, params)
     url = "https://www.youtube.com/embed/" + output["items"][0]["id"]["videoId"]
-    return render(request, 'search.html', {'output':output["items"], "url" : url})
+    my_dict = {
+        'output':output["items"],
+        "url" : url,
+        "previous" : output.get("prevPageToken") if output.get("prevPageToken") else '',
+        "next" : output.get("nextPageToken") if output.get("nextPageToken") else '',
+        "keyword" : params['q']
+    }
+    return render(request, 'search.html', my_dict)

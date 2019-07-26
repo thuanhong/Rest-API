@@ -11,6 +11,10 @@
                 width: 100%
             }
 
+            input {
+                display: none
+            }
+
             h3, img {
                 margin: 0;
                 cursor: pointer;
@@ -43,13 +47,32 @@
             .list-video:hover {
                 background-color: rgba(190, 190, 190, 0.5)
             }
+
+            .btn {
+                font-size: 2vw;
+                padding: 2vh;
+                background-color: aqua;
+                border-radius: 1vh;
+                cursor: pointer;
+                color: black;
+                font-weight: bold
+            }
+
+            .btn-group {
+                clear: both;
+                text-align: center
+            }
+
+            .btn-group > form {
+                display: inline;
+            }
         </style>
     </head>
     <body>
         <div id="left">
             {% for item in output %}
                 <div class="list-video">
-                    <img width="320" height="180" src="{{item.snippet.thumbnails.medium.url}}" alt="Image">
+                    <img onclick="changeVideo(this)" width="320" height="180" src="{{item.snippet.thumbnails.medium.url}}" alt="Image">
                     <div>
                         <h3 onclick="changeVideo(this)" data-id="{{item.id.videoId}}">{{item.snippet.title}}</h3>
                         <p>{{item.snippet.description}}</p>
@@ -60,12 +83,38 @@
         <div id="right">
             <iframe id="frame" width="500" height="340" src="{{url}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
+        <div class="btn-group">
+            <form action="{% url 'searchVideo' %}" method="POST">
+                {% csrf_token %}
+                {% if previous %}
+                    <input name="keyword" value="{{keyword}}">
+                    <input name="token" value={{previous}}>
+                    <button id="btn-left" name="previous" class="btn" onclick="changePage(this)" data-token="{% url 'searchVideo' %}"><<<</button>
+                {% else %}
+                    <button id="btn-left" class="btn" disabled style="color: dimgrey; cursor: text"><<<</button>
+                {% endif %}
+            </form>
+            
+            <form action="{% url 'searchVideo' %}" method="POST" style="display: inline">
+                {% csrf_token %}
+                {% if next %}
+                    <input name="keyword" value="{{keyword}}">
+                    <input name="token" value={{next}}>
+                    <button id="btn-right" name="next" class="btn" onclick="changePage(this)" data-token="{% url 'searchVideo' %}">>>></button>
+                {% else %}
+                    <button id="btn-right" class="btn" disabled style="color: dimgrey; cursor: text">>>></button>
+                {% endif %}
+            </form>
+        </div>
 
         <script>
             function changeVideo(video) {
                 var videoID = video.getAttribute("data-id");
                 var cur_video = document.getElementById("frame")
                 cur_video.src = "https://www.youtube.com/embed/" + videoID
+            }
+            function changePage(id) {
+                window.location.href=id.getAttribute("data-token")
             }
         </script>
     </body>

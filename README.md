@@ -8,7 +8,6 @@
     * Able to store response data in a file, and file type corresponding with response content type (html, xml, pdf, json, text)
     * Able to store error log when it returned client/server errors.
     * Simulate the API Web Services registered.
-    * Create API Design using Swagger. The swagger design must able to test by running cURL
 
 
 ## Learning outcomes:
@@ -17,6 +16,9 @@
     * Restful
     * Django
 
-
-## Project solo :
-    * Hong Thanh Thuan
+## How to run
+    * Core: - cd core
+            - python3 core.py
+    * Simulate: - cd bonus
+                - python3 manage runserver
+                - Visit http://127.0.0.1:8000/ with your Web browser.
