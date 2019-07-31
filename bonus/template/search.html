@@ -83,31 +83,28 @@
         <div id="right">
             <iframe id="frame" width="500" height="340" src="{{url}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
-        <div class="btn-group">
-            <form action="{% url 'searchVideo' %}" method="POST">
-                {% csrf_token %}
-                {% if previous %}
-                    <input name="keyword" value="{{keyword}}">
-                    <input name="token" value={{previous}}>
-                    <button id="btn-left" name="previous" class="btn" onclick="changePage(this)" data-token="{% url 'searchVideo' %}"><<<</button>
-                {% else %}
-                    <button id="btn-left" class="btn" disabled style="color: dimgrey; cursor: text"><<<</button>
-                {% endif %}
-            </form>
-            
-            <form action="{% url 'searchVideo' %}" method="POST" style="display: inline">
-                {% csrf_token %}
-                {% if next %}
-                    <input name="keyword" value="{{keyword}}">
-                    <input name="token" value={{next}}>
-                    <button id="btn-right" name="next" class="btn" onclick="changePage(this)" data-token="{% url 'searchVideo' %}">>>></button>
-                {% else %}
-                    <button id="btn-right" class="btn" disabled style="color: dimgrey; cursor: text">>>></button>
-                {% endif %}
-            </form>
-        </div>
+
+        <script id="template" type="text/template" >
+            <img onclick="changeVideo(this)" width="320" height="180" src="[medium]" alt="Image">
+            <div>
+                <h3 onclick="changeVideo(this)" data-id="[videoId]">[title]</h3>
+                <p>[description]</p>
+            </div>
+        </script>
 
         <script>
+            var pgToken = '&pageToken=' + "{{pageToken}}";
+            var url = 'https://www.googleapis.com/youtube/v3/search?' + "{{params}}".replace(/&amp;/g, '&');;
+            var load = true
+            window.addEventListener('scroll', function() {
+                if (document.documentElement.scrollTop + 600 > document.body.scrollHeight && load) {
+                    load = false
+                    addContent();
+                }
+            });
+            window.onbeforeunload = function () {
+                window.scrollTo(0, 0);
+            }
             function changeVideo(video) {
                 var videoID = video.getAttribute("data-id");
                 var cur_video = document.getElementById("frame")
@@ -115,6 +112,35 @@
             }
             function changePage(id) {
                 window.location.href=id.getAttribute("data-token")
+            }
+
+            function replaceStr(video) {
+                var str_template = document.getElementById('template').text;
+                str_template = str_template.replace('[medium]', video.snippet.thumbnails.medium.url);
+                str_template = str_template.replace('[videoId]', video.id.videoId);
+                str_template = str_template.replace('[description]', video.snippet.description);
+                str_template = str_template.replace('[title]', video.snippet.title);
+                return str_template;
+            }
+
+            function addContent() {
+                fetch(url + pgToken)
+                .then((resp) => resp.json())
+                .then(function(data) {
+                    console.log(url + pgToken)
+                    var arrayLength = data.items.length;
+                    for (var i = 0; i < arrayLength; i++) {
+                        var divNew = document.createElement('div');
+                        divNew.classList.add('list-video');
+                        divNew.innerHTML = replaceStr(data.items[i])
+                        document.getElementById('left').appendChild(divNew)
+                    }
+                    pgToken = '&pageToken=' + data.nextPageToken;
+                    load = true
+                })
+                .catch(function() {
+                    console.log('Error')
+                });
             }
         </script>
     </body>

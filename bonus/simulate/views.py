@@ -52,18 +52,17 @@ def searchVideo(request):
         "part" : "snippet",
         "maxResults" : "15",
         "q" : request.POST['keyword'],
-        "key" : "AIzaSyAelaHZU8ryB7rcyQPaJbRytcX2RrmFKIY",
+        "key" : "AIzaSyDFaYDxgPjRxA06UU25dAQBqKh-ld-NHpA",
         "order" : "viewCount",
         "type" : "video",
-        "pageToken" : request.POST.get("token") if request.POST.get("token") else ''
     }
     output = get_reponse("search", None, 'list', None, params)
     url = "https://www.youtube.com/embed/" + output["items"][0]["id"]["videoId"]
     my_dict = {
         'output':output["items"],
         "url" : url,
-        "previous" : output.get("prevPageToken") if output.get("prevPageToken") else '',
-        "next" : output.get("nextPageToken") if output.get("nextPageToken") else '',
-        "keyword" : params['q']
+        "keyword" : params['q'],
+        "pageToken" : output["nextPageToken"],
+        "params" : '&'.join(['='.join(str(x) for x in y) for y in params.items()])
     }
     return render(request, 'search.html', my_dict)
